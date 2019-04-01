@@ -1,0 +1,168 @@
+set $mod Mod4
+set $mod1 Mod1
+set $stoprec --no-startup-id ~/scripts/dmenurecord kill
+set $ws1 "1"
+set $ws2 "2"
+set $ws3 "3"
+set $ws4 "4"
+set $ws5 "5"
+
+
+new_window pixel 1
+hide_edge_borders none
+new_float normal
+floating_modifier $mod
+
+for_window [class="Termite"] floating enable;move position center
+for_window [class="Leafpad"] floating enable
+for_window [window_role="pop-up"] floating enable
+for_window [window_role="bubble"] floating enable
+for_window [window_role="task_dialog"] floating enable
+for_window [window_role="Preferences"] floating enable
+for_window [class="(?i)pavucontrol"] floating enable, move position center
+for_window [window_role="About"] floating enable
+for_window [window_type="dialog"] floating enable
+for_window [window_type="menu"] floating enable
+for_window [class="Gnome-mpv"] floating enable
+for_window [window_role="app"] floating enable
+for_window [window_role="GtkFileChooserDialog"] resize set 800 600 move position center
+for_window [title="Default - Wine desktop"] floating enable
+for_window [class="java"] floating enable
+for_window [class="^Audacity$"] floating enable
+
+
+#exec_always --no-startup-id /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
+exec_always --no-startup-id dunst
+#exec_always --no-startup-id cd ~/.config/polybar && bash launch.sh
+exec  --no-startup-id feh --bg-scale ~/wall.jpg
+
+bindsym XF86MonBrightnessUp exec xbacklight -inc 5%
+bindsym XF86MonBrightnessDown exec xbacklight -dec 5%
+bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume 0 +5% && pkill -RTMIN+10 i3blocks 
+bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume 0 -5% && pkill -RTMIN+10 i3blocks 
+bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute 0 toggle && pkill -RTMIN+10 i3blocks 
+
+bindsym $mod+Print exec --no-startup-id ~/scripts/dmenurecord
+bindsym $mod+Delete exec $stoprec
+bindsym $mod+m exec --no-startup-id pavucontrol
+bindsym $mod+o exec --no-startup-id firefox
+bindsym $mod+l exec --no-startup-id pcmanfm
+
+bindsym $mod+Return exec i3-sensible-terminal
+bindsym $mod+i exec --no-startup-id leafpad ~/.config/i3/config
+bindsym $mod+shift+i exec --no-startup-id leafpad ~/.config/i3blocks/config
+
+bindsym $mod+d exec --no-startup-id rofi -show drun
+bindsym $mod+c exec --no-startup-id i3-dmenu-desktop
+
+bindsym $mod+Shift+q kill
+bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -B 'Yes, exit i3' 'i3-msg exit'"
+
+bindsym $mod+Left focus left
+bindsym $mod+Down focus down
+bindsym $mod+Up focus up
+bindsym $mod+Right focus right
+
+bindsym $mod+Shift+Left move left
+bindsym $mod+Shift+Down move down
+bindsym $mod+Shift+Up move up
+bindsym $mod+Shift+Right move right
+
+bindsym $mod+h split h
+bindsym $mod+v split v
+bindsym $mod+f fullscreen toggle
+
+bindsym $mod+s layout stacking
+bindsym $mod+w layout tabbed
+bindsym $mod+e layout toggle split
+
+bindsym $mod+Shift+space floating toggle
+bindsym $mod+space focus mode_toggle
+bindsym $mod+a focus parent
+#bindsym $mod+d focus child
+
+bindsym $mod+1 workspace $ws1
+bindsym $mod+2 workspace $ws2
+bindsym $mod+3 workspace $ws3
+bindsym $mod+4 workspace $ws4
+bindsym $mod+5 workspace $ws5
+
+bindsym $mod+Shift+1 move container to workspace $ws1
+bindsym $mod+Shift+2 move container to workspace $ws2
+bindsym $mod+Shift+3 move container to workspace $ws3
+bindsym $mod+Shift+4 move container to workspace $ws4
+bindsym $mod+Shift+5 move container to workspace $ws5
+
+bindsym $mod+Shift+c reload
+bindsym $mod+Shift+r restart
+
+bindsym $mod1+Left resize shrink width 10 px or 10 ppt
+bindsym $mod1+Down resize grow height 10 px or 10 ppt
+bindsym $mod1+Up resize shrink height 10 px or 10 ppt
+bindsym $mod1+Right resize grow width 10 px or 10 ppt
+
+bindsym $mod+Shift+minus move scratchpad
+bindsym $mod+minus scratchpad show
+bindsym $mod+n bar mode toggle
+
+# class                   border  backgr. text    indic.   child_border
+  client.focused          #282a36 #44475a #f8f8f2 #FDF6E3
+  client.focused_inactive #282a36 #282a36 #f8f8f2 #454948
+  client.unfocused        #282a36 #282a36 #f8f8f2 #454948
+  client.urgent           #CB4B16 #FDF6E3 #f8f8f2 #268BD2
+  client.placeholder      #000000 #0c0c0c #ffffff #000000 
+
+  client.background       #2B2C2B
+
+gaps inner 14
+gaps outer 15
+
+smart_gaps on
+smart_borders on
+
+# Press $mod+Shift+g to enter the gap mode. Choose o or i for modifying outer/inner gaps. Press one of + / - (in-/decrement for current workspace) or 0 (remove gaps for current workspace). If you also press Shift with these keys, the change will be global for all workspaces.
+set $mode_gaps Gaps: (o) outer, (i) inner
+set $mode_gaps_outer Outer Gaps: +|-|0 (local), Shift + +|-|0 (global)
+set $mode_gaps_inner Inner Gaps: +|-|0 (local), Shift + +|-|0 (global)
+bindsym $mod+Shift+g mode "$mode_gaps"
+
+bindsym Print exec --no-startup-id cd Pictures && scrot && dunstify "Screenshot Taken"
+
+mode "$mode_gaps" {
+        bindsym o      mode "$mode_gaps_outer"
+        bindsym i      mode "$mode_gaps_inner"
+        bindsym Return mode "default"
+        bindsym Escape mode "default"
+}
+mode "$mode_gaps_inner" {
+        bindsym plus  gaps inner current plus 5
+        bindsym minus gaps inner current minus 5
+        bindsym 0     gaps inner current set 0
+
+        bindsym Shift+plus  gaps inner all plus 5
+        bindsym Shift+minus gaps inner all minus 5
+        bindsym Shift+0     gaps inner all set 0
+
+        bindsym Return mode "default"
+        bindsym Escape mode "default"
+}
+mode "$mode_gaps_outer" {
+        bindsym plus  gaps outer current plus 5
+        bindsym minus gaps outer current minus 5
+        bindsym 0     gaps outer current set 0
+
+        bindsym Shift+plus  gaps outer all plus 5
+        bindsym Shift+minus gaps outer all minus 5
+        bindsym Shift+0     gaps outer all set 0
+
+        bindsym Return mode "default"
+  
+      bindsym Escape mode "default"
+}
+bar {
+	font pango:mono 10
+	status_command i3blocks
+	position top
+	mode dock
+	modifier None
+}
