@@ -1,0 +1,2 @@
+sudo  wpa_supplicant -B  -i wlp0s20u3  -c /home/kai/scripts/wpa_supplicant.conf 
+
