@@ -1,11 +1,18 @@
 set $mod Mod4
 set $mod1 Mod1
+font pango:Source Sans Pro 10
 set $stoprec --no-startup-id ~/scripts/dmenurecord kill
-set $ws1 "1"
-set $ws2 "2"
-set $ws3 "3"
-set $ws4 "4"
-set $ws5 "5"
+
+set $ws1    "1:   Terminal "
+set $ws2    "2:   Code "
+set $ws3    "3:   Browser "
+set $ws4    "4:   Files "
+set $ws5    "5:   Documents "
+set $ws6    "6:   Media "
+set $ws7    "7:   Design "
+set $ws8    "8:   Chat "
+set $ws9    "9:   General "
+set $ws10 "10:  Settings "
 
 
 new_window pixel 1
@@ -13,7 +20,7 @@ hide_edge_borders none
 new_float normal
 floating_modifier $mod
 
-for_window [class="Termite"] floating enable;move position center
+
 for_window [class="Leafpad"] floating enable
 for_window [window_role="pop-up"] floating enable
 for_window [window_role="bubble"] floating enable
@@ -31,32 +38,59 @@ for_window [class="java"] floating enable
 for_window [class="^Audacity$"] floating enable
 
 
+assign [class="terminal"] → $ws1
+assign [class="Termite"] → $ws1
+assign [class="Sublime"] → $ws2
+assign [class="code-oss"] → $ws2
+assign [class="Firefox"] → $ws3
+assign [class="Google-chrome"] → $ws3
+assign [class="Authy"] → $ws3
+assign [class="Xarchiver"]        → $ws4
+assign [class="Pcmanfm"]            → $ws4
+assign [class="Evince"] → $ws5
+assign [class="mpv"] → $ws6
+assign [class="Gnome-mpv"] → $ws6
+assign [class="Gimp"] → $ws7
+assign [class="Telegram"] → $ws8
+assign [class="Hexchat"] → $ws8
+assign [class="Gnome-font-viewer"] → $ws9
+assign [class="qBittorrent"] → $ws9
+assign [class="GParted"] → $ws10
+assign [class="Lxappearance"] → $ws10
+assign [class="PkgBrowser"] → $ws10
+assign [class="Gimp"] → $ws7
+
 #exec_always --no-startup-id /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
 exec_always --no-startup-id dunst
 #exec_always --no-startup-id cd ~/.config/polybar && bash launch.sh
-exec  --no-startup-id feh --bg-scale ~/wall.jpg
+#exec  --no-startup-id feh --bg-scale ~/wall.jpg
 
 bindsym XF86MonBrightnessUp exec xbacklight -inc 5%
 bindsym XF86MonBrightnessDown exec xbacklight -dec 5%
+
 bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume 0 +5% && pkill -RTMIN+10 i3blocks 
 bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume 0 -5% && pkill -RTMIN+10 i3blocks 
 bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute 0 toggle && pkill -RTMIN+10 i3blocks 
 
+bindsym $mod+b exec pactl set-sink-port 0 "analog-output-headphones"
+bindsym $mod+Shift+b exec pactl set-sink-port 0 "analog-output-speaker"
+
 bindsym $mod+Print exec --no-startup-id ~/scripts/dmenurecord
 bindsym $mod+Delete exec $stoprec
 bindsym $mod+m exec --no-startup-id pavucontrol
-bindsym $mod+o exec --no-startup-id firefox
-bindsym $mod+l exec --no-startup-id pcmanfm
+bindsym $mod+w exec --no-startup-id firefox
+bindsym $mod+e exec --no-startup-id pcmanfm
 
-bindsym $mod+Return exec i3-sensible-terminal
+bindsym $mod+Return exec i3-sensible-terminal;split h
 bindsym $mod+i exec --no-startup-id leafpad ~/.config/i3/config
 bindsym $mod+shift+i exec --no-startup-id leafpad ~/.config/i3blocks/config
+bindsym $mod+slash exec i3-sensible-terminal;split v
 
 bindsym $mod+d exec --no-startup-id rofi -show drun
 bindsym $mod+c exec --no-startup-id i3-dmenu-desktop
 
 bindsym $mod+Shift+q kill
-bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -B 'Yes, exit i3' 'i3-msg exit'"
+bindsym $mod+Shift+a exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -B 'Yes, exit i3' 'i3-msg exit'"
 
 bindsym $mod+Left focus left
 bindsym $mod+Down focus down
@@ -72,9 +106,9 @@ bindsym $mod+h split h
 bindsym $mod+v split v
 bindsym $mod+f fullscreen toggle
 
-bindsym $mod+s layout stacking
-bindsym $mod+w layout tabbed
-bindsym $mod+e layout toggle split
+bindsym $mod+Shift+s layout stacking
+bindsym $mod+Shift+w layout tabbed
+bindsym $mod+Shift+e layout toggle split
 
 bindsym $mod+Shift+space floating toggle
 bindsym $mod+space focus mode_toggle
@@ -86,12 +120,22 @@ bindsym $mod+2 workspace $ws2
 bindsym $mod+3 workspace $ws3
 bindsym $mod+4 workspace $ws4
 bindsym $mod+5 workspace $ws5
+bindsym $mod+6 workspace $ws6
+bindsym $mod+7 workspace $ws7
+bindsym $mod+8 workspace $ws8
+bindsym $mod+9 workspace $ws9
+bindsym $mod+0 workspace $ws10
 
 bindsym $mod+Shift+1 move container to workspace $ws1
 bindsym $mod+Shift+2 move container to workspace $ws2
 bindsym $mod+Shift+3 move container to workspace $ws3
 bindsym $mod+Shift+4 move container to workspace $ws4
 bindsym $mod+Shift+5 move container to workspace $ws5
+bindsym $mod+Shift+6 move container to workspace $ws6
+bindsym $mod+Shift+7 move container to workspace $ws7
+bindsym $mod+Shift+8 move container to workspace $ws8
+bindsym $mod+Shift+9 move container to workspace $ws9
+bindsym $mod+Shift+0 move container to workspace $ws10
 
 bindsym $mod+Shift+c reload
 bindsym $mod+Shift+r restart
@@ -104,15 +148,6 @@ bindsym $mod1+Right resize grow width 10 px or 10 ppt
 bindsym $mod+Shift+minus move scratchpad
 bindsym $mod+minus scratchpad show
 bindsym $mod+n bar mode toggle
-
-# class                   border  backgr. text    indic.   child_border
-  client.focused          #282a36 #44475a #f8f8f2 #FDF6E3
-  client.focused_inactive #282a36 #282a36 #f8f8f2 #454948
-  client.unfocused        #282a36 #282a36 #f8f8f2 #454948
-  client.urgent           #CB4B16 #FDF6E3 #f8f8f2 #268BD2
-  client.placeholder      #000000 #0c0c0c #ffffff #000000 
-
-  client.background       #2B2C2B
 
 gaps inner 14
 gaps outer 15
@@ -159,10 +194,36 @@ mode "$mode_gaps_outer" {
   
       bindsym Escape mode "default"
 }
+
+# class                 border  backgr. text    indicator child_border
+client.focused          #2b83a6 #2b83a6 #ffffff #dddddd   #2b83a6
+client.focused_inactive #212121 #212121 #86888c #292d2e   #5a5a5a
+client.unfocused        #212121 #212121 #86888c #292d2e   #5a5a5a
+client.urgent           #d64e4e #d64e4e #ffffff #d64e4e   #d64e4e
+client.placeholder      #212121 #0c0c0c #ffffff #212121   #262626
+client.background       #212121
+
+
 bar {
-	font pango:mono 10
+
+
+font pango:Inconsolata, Icons 10
+
+
 	status_command i3blocks
 	position top
 	mode dock
 	modifier None
+    
+colors {
+        background  #212121
+        statusline  #dddddd
+        separator   #666666
+        # class             border  backgr. text
+        focused_workspace   #2b83a6 #ff83a6 #ffffff
+        active_workspace    #212121 #212121 #ffffff
+        inactive_workspace  #212121 #212121 #86888c
+        urgent_workspace    #d64e4e #d64e4e #ffffff
+        binding_mode        #229c56 #229c56 #ffffff
+}
 }
